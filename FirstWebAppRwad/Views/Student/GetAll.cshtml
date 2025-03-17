@@ -1,0 +1,24 @@
+﻿@model List<Student>
+
+@foreach(var item in Model)
+{
+    
+
+    <div style="border:2px solid black ; margin:20px ; background-color:aqua">
+
+        <h2>@item.Name</h2>
+        <h2>@item.Address</h2>
+        <h2><img  src="/Images/@item.Image"/></h2>
+
+
+    </div>
+
+    <br />
+    <hr />
+}
+
+<!-- when creating view engine create at background class Views_Student_GetAll-->
+<!-- Views_Student_GetAllStudents :RazorPage<T>   -->
+    <!--by default T wll be dynamic -->
+    <!-- Model  -->
+    <!-- model     -->
