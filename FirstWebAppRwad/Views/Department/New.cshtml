@@ -1,0 +1,21 @@
+﻿@model Department
+@{
+    ViewData["Title"] = "New";
+}
+
+<h1>New</h1>
+
+<form method="get" action="/Department/CreateNew">
+    <label>Name</label>
+    <div>
+        <input type="text" id="name" name="name" class="form-control" value="@Model.Name"/>
+    </div>
+    <label>Location</label>
+    <div>
+        <input type="text" id="location"  name="location" class="form-control" value="@Model.Location"/>
+    </div>
+    <div>
+        <input type="submit" value="Create Dept" class="btn btn-primary"/>
+    </div>
+    
+</form>
