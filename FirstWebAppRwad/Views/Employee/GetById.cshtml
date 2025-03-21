@@ -1,0 +1,60 @@
+﻿
+@model EmployeeWithColorAndMessageAndNameAndBranchesViewModel
+
+@{
+    ViewData["Title"] = "GetById";
+}
+
+<h1>GetById</h1>
+
+<div class="card" style="background-color:@Model.Color">
+    <div class="card-header">
+        Employee Data
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">@Model.Employee.Name</h5>
+        <p class="card-text">@Model.Employee.Address</p>
+        <a href="#" class="btn btn-primary">@Model.Employee.Age</a>
+    </div>
+</div>
+
+
+@* <h3>@ViewData["Message"].ToString()</h3>
+<h3>@ViewData["name"].ToString()</h3> *@
+<h3>@Model.Message</h3>
+<h3>@Model.Name</h3>
+
+@* <h3>@ViewBag.Message</h3>
+<h3>@ViewBag.name</h3> *@
+
+@* <select class="form-control">
+    @foreach (var item in (List<string>)ViewData["branches"])
+    {
+     <option>@item</option>   
+    }
+</select>
+ *@
+@* <select class="form-control">
+    @foreach (var item in ViewBag.branches)
+    {
+        <option>@item</option>
+    }
+
+</select> *@
+
+<!--ViewData  : Magic String-->
+<!-- need casting -->
+
+<!--View Bag  magic string-->
+<!--dynmaic-->
+
+<select>
+    @foreach(var item in Model.Branches)
+    {
+        <option>@item</option>
+    }
+</select>
+
+<a href="/Employee/GetById?id=2"></a>
+
+<a asp-controller="Employee" asp-action="getById" asp-route-id="2"></a>

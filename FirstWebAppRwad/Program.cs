@@ -7,7 +7,11 @@ namespace FirstWebAppRwad
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddSession(option =>
+            {
+                option.IOTimeout = TimeSpan.FromMinutes(50);
+            });
+            builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
 
             var app = builder.Build();
 
@@ -24,15 +28,17 @@ namespace FirstWebAppRwad
             app.UseStaticFiles();
 
             //controller Name = department  action name =index
-            app.UseRouting();  
+            app.UseRouting();
             //user name and password 
             //app.UseAuthentication();
             //authoized 
-           // app.UseAuthorization();
+            // app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Department}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
             app.Run();
 
 
