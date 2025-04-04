@@ -1,0 +1,21 @@
+﻿@model Department
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<form action="/Department/Edit?id=@Model.Id" method="post">
+    <div>
+        <label for="Name">Name</label>
+        <input type="text" name="Name" id="Name" value="@Model.Name" class="form-control" />
+    </div>
+    <div>
+        <label for="Location">Location</label>
+        <input type="text" name="Location" id="Location" value="@Model.Location" class="form-control" />
+    </div>
+    <br />
+    <div>
+        <input type="submit" value="edit" class="btn btn-primary" />
+    </div>
+</form>

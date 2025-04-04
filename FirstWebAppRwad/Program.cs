@@ -39,7 +39,7 @@ namespace FirstWebAppRwad
             app.MapControllerRoute(
                 name: "default",
         // pattern: "{controller=Home}/{action=Index}/{id?}");
-                pattern: "{controller=Department}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
             // pattern: "{controller=Home}/{action=Index}/{name?}");
             app.Run();
 

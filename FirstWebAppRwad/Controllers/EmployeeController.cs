@@ -1,6 +1,8 @@
-﻿using FirstWebAppRwad.Models.Context;
+﻿using FirstWebAppRwad.Models;
+using FirstWebAppRwad.Models.Context;
 using FirstWebAppRwad.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FirstWebAppRwad.Controllers
 {
@@ -16,7 +18,7 @@ namespace FirstWebAppRwad.Controllers
         }
         public IActionResult Index()
         {
-            var emps = context.Employees.ToList();
+            var emps = context.Employees.Include(x => x.Department).ToList();
             //return View("Index");
             //return View();
             //return View("index", emps);
@@ -61,6 +63,30 @@ namespace FirstWebAppRwad.Controllers
             viewModel.Employee = emp;
             #endregion
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var depts = context.Departments.ToList();
+            ViewData["depts"] = depts;
+            return View(new Employee());
+        }
+
+        [HttpPost]
+        public IActionResult Create(Employee newEmp )
+        {
+            if(newEmp.Name !=null &&newEmp.Age!=0&&newEmp.Salary!=0&&newEmp.Address!=null&&newEmp.DeptId!=null)
+            {
+                context.Employees.Add(newEmp);
+                context.SaveChanges();
+                return RedirectToAction("index");
+            }
+            else
+            {
+                return View(newEmp);
+            }
+                
         }
     }
 }
