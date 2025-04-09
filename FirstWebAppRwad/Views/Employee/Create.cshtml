@@ -1,5 +1,6 @@
 ﻿@model Employee
 @{
+    Layout = "_MyLayout";
     ViewData["Title"] = "Create";
 
     SelectList selectListItems = new SelectList(ViewBag.depts, "Id", "Name");
@@ -12,9 +13,9 @@
     <div>
         <label for="Name">Name</label>
         <input type="text" name="Name" id="Name" value="@Model.Name" class="form-control"/>
-       @*  @Html.TextBox("Name",value:Model.Name,htmlAttributes:new {@class="form-control"}) *@
-      @*  @Html.TextBoxFor((x)=>x.,"Name") *@
-     
+@*  @Html.TextBox("Name",value:Model.Name,htmlAttributes:new {@class="form-control"}) *@
+@*  @Html.TextBoxFor((x)=>x.,"Name") *@
+
     </div>
 
     <div>
@@ -34,7 +35,7 @@
     <div>
         <label for="DeptId">DeptId</label>
         <select name="DeptId" class="form-control">
-         @*    @foreach (var item in ViewBag.depts)
+@*    @foreach (var item in ViewBag.depts)
             {
                 <option value="@item.Id">@item.Name</option>
             } *@
@@ -51,27 +52,30 @@
     <div>
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name"></span>
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div>
         <label for="Age">Age</label>
         <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+
     </div>
     <div>
         <label asp-for="Salary"></label>
         <input asp-for="Salary" class="form-control" />
+        <span asp-validation-for="Salary" class="text-danger"></span>
     </div>
 
     <div>
         <label asp-for="Address"></label>
         <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
     </div>
 
     <div>
         <label asp-for="DeptId"></label>
         <select class="form-control" asp-for="DeptId" asp-items="selectListItems">
-           
         </select>
     </div>
 
@@ -80,3 +84,10 @@
     </div>
 </form>
 
+
+@section Scripts
+    {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    }

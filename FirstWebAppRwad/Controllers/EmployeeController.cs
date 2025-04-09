@@ -76,8 +76,9 @@ namespace FirstWebAppRwad.Controllers
         [HttpPost]
         public IActionResult Create(Employee newEmp )
         {
-            if(ModelState.IsValid)
-           // if(newEmp.Name !=null &&newEmp.Age!=0&&newEmp.Salary!=0&&newEmp.Address!=null&&newEmp.DeptId!=null)
+            if(ModelState.IsValid==true)
+            
+            //if(newEmp.Name !=null &&newEmp.Name.Length>=3&&newEmp.Name.Length<=20 &&newEmp.Age!=0&&newEmp.Salary!=0&&newEmp.Address!=null&&newEmp.DeptId!=null)
             {
                 context.Employees.Add(newEmp);
                 context.SaveChanges();
@@ -85,11 +86,19 @@ namespace FirstWebAppRwad.Controllers
             }
             else
             {
+
+              
                 var depts = context.Departments.ToList();
                 ViewData["depts"] = depts;
                 return View(newEmp);
             }
                 
+        }
+
+
+        public IActionResult dummyView()
+        {
+            return View();
         }
     }
 }
