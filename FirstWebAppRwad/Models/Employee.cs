@@ -8,7 +8,7 @@ namespace FirstWebAppRwad.Models
     {
         public int Id { get; set; }
         [DisplayName("Emp Name")]
-        [Required]
+        [Required]     
         public string? Name { get; set; }
         public int Age { get; set; }
         public int Salary { get; set; }

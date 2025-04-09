@@ -46,10 +46,12 @@
     </div>
 </form>
 -->
+
 <form method="post" asp-action="Create" asp-controller="Employee">
     <div>
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
     </div>
 
     <div>
@@ -77,3 +79,4 @@
         <input type="submit" class="btn btn-primary" value="Create New " />
     </div>
 </form>
+
