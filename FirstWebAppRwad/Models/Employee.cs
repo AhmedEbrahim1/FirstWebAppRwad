@@ -14,7 +14,7 @@ namespace FirstWebAppRwad.Models
         [MinLength(3,ErrorMessage ="name must be at least 3 character")]
         [MaxLength(20,ErrorMessage ="maximum lenght is 20 character")]
         // [UniqueName]
-        [Remote(action: "checkUniqueName",controller: "Employee",ErrorMessage ="Duplicated Name")]
+        [Remote(action: "checkUniqueName",controller: "Employee",AdditionalFields ="Id",ErrorMessage ="Duplicated Name")]
         public string? Name { get; set; }
         [Required]
         [Range(20,65)]

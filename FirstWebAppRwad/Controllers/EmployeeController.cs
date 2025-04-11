@@ -112,12 +112,14 @@ namespace FirstWebAppRwad.Controllers
             return Json(true);
         }
 
-        public IActionResult checkUniqueName(string name)
+        public IActionResult checkUniqueName(string name, int id)
         {
-            var emps = context.Employees.Where(x => x.Name == name);
-            if (emps is null)
+            var emps = context.Employees.Where(x => x.Name == name).FirstOrDefault();
+            var empId = context.Employees.Find(id);
+            if (emps == null ||empId is not null)
                 return Json(true);
-            return Json(false);
+            else
+                return Json(false);
         }
 
         public IActionResult getEmpbyId(int id)
@@ -135,9 +137,9 @@ namespace FirstWebAppRwad.Controllers
             return View(oldEmp);
         }
         [HttpPost]
-        public IActionResult Edit(int id,Employee editEmp)
+        public IActionResult Edit(int id, Employee editEmp)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 //var oldEmp = context.Employees.Find(id);
                 //oldEmp.Name = editEmp.Name;
@@ -150,7 +152,7 @@ namespace FirstWebAppRwad.Controllers
                 context.Employees.Update(editEmp);
                 context.SaveChanges();
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
             else
             {
