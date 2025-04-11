@@ -6,9 +6,8 @@
 
 <h1>Index</h1>
 
+
 <br />
-<a href="/Employee/Create" class="btn btn-outline-primary">Add New Employee</a>
-@* @Html.ActionLink("Add new emp","Create","Employee",htmlAttributes:new {@class="btn btn-info"}) *@
 
 <a asp-action="Create" asp-controller="Employee" class="btn btn-outline-primary">Add new Employee</a>
 <br />
@@ -21,9 +20,10 @@
         <th>Address</th>
         <th>Department</th>
         <th></th>
+        <th></th>
     </tr>
 
-    @foreach(var emp in Model)
+    @foreach (var emp in Model)
     {
         <tr>
             <td>@emp.Name</td>
@@ -33,10 +33,40 @@
             <td>@emp.Department?.Name</td>
             <td>
                 <a href="/Employee/Edit?id=@emp.Id" class="btn btn-secondary"><i class="fa-solid fa-pen-to-square"></i></a>
-                <a href="/Employee/getbyId?id=@emp.Id" class="btn btn-info">Info</a>
+                <a href="#" class="btn btn-info" onclick="getEmpById(@emp.Id)">Info</a>
+
             </td>
+
         </tr>
     }
 
 </table>
+<div id="div1"></div>
+@section Scripts {
+    <script>
 
+        function getEmpById(Id){
+            event.preventDefault();
+
+
+              $.ajax({
+               url:"/Employee/getEmpById/"+Id,
+              success:function(result){
+                         $("#div1").html(result);
+
+        // Wait until DOM has updated before trying to access the modal
+        setTimeout(function () {
+            var modalElement = document.getElementById('exampleModal');
+            if (modalElement) {
+                var myModal = new bootstrap.Modal(modalElement);
+                myModal.show();
+            } else {
+                console.error("Modal not found in DOM");
+            }
+        }, 100); // S
+              }
+
+           });
+        }
+    </script>
+}

@@ -14,7 +14,7 @@ namespace FirstWebAppRwad.Controllers
 
         public EmployeeController()
         {
-            
+
         }
         public IActionResult Index()
         {
@@ -34,7 +34,7 @@ namespace FirstWebAppRwad.Controllers
             string Message = "hello world";
             string name = "Ahmed Rizq";
 
-         
+
             List<string> branches = new List<string>()
             {
                 "Cairo", "Assuit","Mansoura"
@@ -55,7 +55,7 @@ namespace FirstWebAppRwad.Controllers
             var emp = context.Employees.Find(id);
 
             #region Deal With View Model
-            EmployeeWithColorAndMessageAndNameAndBranchesViewModel viewModel =new();
+            EmployeeWithColorAndMessageAndNameAndBranchesViewModel viewModel = new();
             viewModel.Name = "youssef";
             viewModel.Color = "red";
             viewModel.Message = "this is my new Message";
@@ -74,10 +74,10 @@ namespace FirstWebAppRwad.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Employee newEmp )
+        public IActionResult Create(Employee newEmp)
         {
-            if(ModelState.IsValid==true)
-            
+            if (ModelState.IsValid == true)
+
             //if(newEmp.Name !=null &&newEmp.Name.Length>=3&&newEmp.Name.Length<=20 &&newEmp.Age!=0&&newEmp.Salary!=0&&newEmp.Address!=null&&newEmp.DeptId!=null)
             {
                 context.Employees.Add(newEmp);
@@ -87,18 +87,56 @@ namespace FirstWebAppRwad.Controllers
             else
             {
 
-              
+
                 var depts = context.Departments.ToList();
                 ViewData["depts"] = depts;
                 return View(newEmp);
             }
-                
+
         }
 
 
         public IActionResult dummyView()
         {
             return View();
+        }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var emp = context.Employees.Find(id);
+            var depts = context.Departments.ToList();
+            ViewBag.depts = depts;
+            return View(emp);
+        }
+        [HttpPost]
+        public IActionResult Edit(Employee editEmp)
+        {
+            if (ModelState.IsValid)
+            {
+                context.Entry(editEmp).State = EntityState.Modified;
+                context.Employees.Update(editEmp);
+                context.SaveChanges();
+                return RedirectToAction("index");
+            }
+            else
+            {
+                var depts = context.Departments.ToList();
+                ViewBag.depts = depts;
+                return View(editEmp);
+            }
+        }
+
+
+        //public IActionResult getEmpById(int id)
+        //{
+        //    var emp = context.Employees.Find(id);
+        //    return Json(emp);
+        //}
+
+        public IActionResult getEmpById(int id)
+        {
+            var emp = context.Employees.Find(id);
+            return PartialView("_DetailsPartial",emp);
         }
     }
 }
