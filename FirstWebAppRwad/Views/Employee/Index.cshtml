@@ -7,8 +7,6 @@
 <h1>Index</h1>
 
 <br />
-<a href="/Employee/Create" class="btn btn-outline-primary">Add New Employee</a>
-@* @Html.ActionLink("Add new emp","Create","Employee",htmlAttributes:new {@class="btn btn-info"}) *@
 
 <a asp-action="Create" asp-controller="Employee" class="btn btn-outline-primary">Add new Employee</a>
 <br />
@@ -26,14 +24,16 @@
     @foreach(var emp in Model)
     {
         <tr>
-            <td>@emp.Name</td>
+            <td>
+                <partial name="_CardPartial" model="emp"/>
+            </td>
             <td>@emp.Age</td>
             <td>@emp.Salary</td>
             <td>@emp.Address</td>
             <td>@emp.Department?.Name</td>
             <td>
                 <a href="/Employee/Edit?id=@emp.Id" class="btn btn-secondary"><i class="fa-solid fa-pen-to-square"></i></a>
-                <a href="/Employee/getbyId?id=@emp.Id" class="btn btn-info">Info</a>
+                <a href="/Employee/getEmpbyId?id=@emp.Id" class="btn btn-info">Info</a>
             </td>
         </tr>
     }

@@ -3,6 +3,7 @@ using FirstWebAppRwad.Models.Context;
 using FirstWebAppRwad.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FirstWebAppRwad.Controllers
 {
@@ -14,7 +15,7 @@ namespace FirstWebAppRwad.Controllers
 
         public EmployeeController()
         {
-            
+
         }
         public IActionResult Index()
         {
@@ -34,7 +35,7 @@ namespace FirstWebAppRwad.Controllers
             string Message = "hello world";
             string name = "Ahmed Rizq";
 
-         
+
             List<string> branches = new List<string>()
             {
                 "Cairo", "Assuit","Mansoura"
@@ -55,7 +56,7 @@ namespace FirstWebAppRwad.Controllers
             var emp = context.Employees.Find(id);
 
             #region Deal With View Model
-            EmployeeWithColorAndMessageAndNameAndBranchesViewModel viewModel =new();
+            EmployeeWithColorAndMessageAndNameAndBranchesViewModel viewModel = new();
             viewModel.Name = "youssef";
             viewModel.Color = "red";
             viewModel.Message = "this is my new Message";
@@ -74,10 +75,10 @@ namespace FirstWebAppRwad.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Employee newEmp )
+        public IActionResult Create(Employee newEmp)
         {
-            if(ModelState.IsValid==true)
-            
+            if (ModelState.IsValid == true)
+
             //if(newEmp.Name !=null &&newEmp.Name.Length>=3&&newEmp.Name.Length<=20 &&newEmp.Age!=0&&newEmp.Salary!=0&&newEmp.Address!=null&&newEmp.DeptId!=null)
             {
                 context.Employees.Add(newEmp);
@@ -87,12 +88,12 @@ namespace FirstWebAppRwad.Controllers
             else
             {
 
-              
+
                 var depts = context.Departments.ToList();
                 ViewData["depts"] = depts;
                 return View(newEmp);
             }
-                
+
         }
 
 
@@ -100,5 +101,64 @@ namespace FirstWebAppRwad.Controllers
         {
             return View();
         }
+
+
+        public IActionResult CheckSalary(int salary, string name)
+        {
+            if (salary < 10000)
+            {
+                return Json(false);
+            }
+            return Json(true);
+        }
+
+        public IActionResult checkUniqueName(string name)
+        {
+            var emps = context.Employees.Where(x => x.Name == name);
+            if (emps is null)
+                return Json(true);
+            return Json(false);
+        }
+
+        public IActionResult getEmpbyId(int id)
+        {
+            var emp = context.Employees.Find(id);
+            return View(emp);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var oldEmp = context.Employees.Find(id);
+            var depts = context.Departments.ToList();
+            ViewData["depts"] = depts;
+            return View(oldEmp);
+        }
+        [HttpPost]
+        public IActionResult Edit(int id,Employee editEmp)
+        {
+            if(ModelState.IsValid)
+            {
+                //var oldEmp = context.Employees.Find(id);
+                //oldEmp.Name = editEmp.Name;
+                //oldEmp.Address = editEmp.Address;
+                //oldEmp.Age = editEmp.Age;
+                //oldEmp.Salary = editEmp.Salary;
+                //oldEmp.DeptId = editEmp.DeptId;
+                var myState = context.Entry(editEmp).State;
+                context.Entry(editEmp).State = EntityState.Modified;
+                context.Employees.Update(editEmp);
+                context.SaveChanges();
+
+            return RedirectToAction("Index");
+            }
+            else
+            {
+                var depts = context.Departments.ToList();
+                ViewData["depts"] = depts;
+                return View(editEmp);
+            }
+        }
+
     }
 }
