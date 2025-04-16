@@ -41,7 +41,7 @@
                 <a href="/Employee/Edit?id=@emp.Id" class="btn btn-secondary"><i class="fa-solid fa-pen-to-square"></i></a>
                 <a href="/Employee/getEmpbyId?id=@emp.Id" class="btn btn-info">Info</a>
                 <a href="#" onclick="GetEmpByIdUsingPartial(@emp.Id)" class="btn btn-warning">DetailPartial</a>
-                <a href="#" onclick="GetEmpByIdUsingModal(@emp.Id)" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">DetailModal</a>
+                <a href="#" onclick="GetEmpByIdUsingModal(@emp.Id)" class="btn btn-success">DetailModal</a>
             </td>
         </tr>
     }
@@ -73,6 +73,18 @@
                 type:"get",
                 success:function(result){
                     $("#div2").html(result);
+                    setTimeout(function(){
+                        var modalElement=document.getElementById("exampleModal");
+                        if(modalElement){
+                            var modal = new bootstrap.Modal("modalElement");
+                            modal.show();
+                        }
+                        else{
+                            console.log("error Happened");
+                        }
+
+                    },100);
+
                 }
 
             });
