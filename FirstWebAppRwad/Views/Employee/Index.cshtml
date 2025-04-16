@@ -43,16 +43,13 @@
 </table>
 
 @section Scripts{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script>
         
         function GetEmpByIdUsingPartial(id){
            event.preventDefault();
            debugger;
            $.ajax({
-               URL:"/Employee/GetEmpByIdUsingPartial/"+id,
-               success:function(result){
-                   console.log(result);
+               url:"/Employee/GetEmpByIdUsingPartial/"+id
 
                }
            });
