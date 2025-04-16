@@ -11,8 +11,10 @@
 <div id="div1" style="border:10px solid red;"></div>
 <br />
 <div id="div2" style="border:10px solid yellow;"></div>
+<div id="div3" style="border:10px solid green;"></div>
 
 <br />
+
 
 <a asp-action="Create" asp-controller="Employee" class="btn btn-outline-primary">Add new Employee</a>
 <br />
@@ -41,7 +43,8 @@
                 <a href="/Employee/Edit?id=@emp.Id" class="btn btn-secondary"><i class="fa-solid fa-pen-to-square"></i></a>
                 <a href="/Employee/getEmpbyId?id=@emp.Id" class="btn btn-info">Info</a>
                 <a href="#" onclick="GetEmpByIdUsingPartial(@emp.Id)" class="btn btn-warning">DetailPartial</a>
-                <a href="#" onclick="GetEmpByIdUsingModal(@emp.Id)" class="btn btn-success">DetailModal</a>
+                <a href="#" onclick="GetEmpByIdUsingModal(@emp.Id)" class="btn btn-success" >DetailModal</a>
+                <a href="#" onclick="EditByModal(@emp.Id)" class="btn btn-danger">EditByModal</a>
             </td>
         </tr>
     }
@@ -49,7 +52,11 @@
 </table>
 
 @section Scripts{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script>
+        
         
         function GetEmpByIdUsingPartial(Id)
         {
@@ -73,17 +80,17 @@
                 type:"get",
                 success:function(result){
                     $("#div2").html(result);
-                    setTimeout(function(){
-                        var modalElement=document.getElementById("exampleModal");
-                        if(modalElement){
-                            var modal = new bootstrap.Modal("modalElement");
-                            modal.show();
-                        }
-                        else{
-                            console.log("error Happened");
-                        }
+                   var modalHtmlElement=$("#exampleModal");
 
-                    },100);
+                   if(modalHtmlElement)
+                   {
+                       var modal = new bootstrap.Modal(modalHtmlElement);
+                       modal.show();
+                   }
+                   else
+                   {
+                     console.log("Dom not loaded successfully");
+                   }
 
                 }
 
@@ -91,6 +98,32 @@
 
         }
 
+
+        function EditByModal(id){
+            event.preventDefault();
+
+            $.ajax({
+                url:"Employee/EditByModal?id="+id,
+                type:"get",
+                success:function(result){
+                    $("#div3").html(result);
+                    $.validator.unobtrusive.parse($("#div3"));
+                   var modalHtmlElement=$("#exampleModal");
+
+                   if(modalHtmlElement)
+                   {
+                       var modal = new bootstrap.Modal(modalHtmlElement);
+                       modal.show();
+                   }
+                   else
+                   {
+                     console.log("Dom not loaded successfully");
+                   }
+
+                }
+
+            });
+        }
 
     </script>
 
