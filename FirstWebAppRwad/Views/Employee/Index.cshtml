@@ -5,6 +5,7 @@
 }
 
 <h1>Index</h1>
+<div id="div1" style="border:10px solid red;"></div>
 
 <br />
 
@@ -34,12 +35,29 @@
             <td>
                 <a href="/Employee/Edit?id=@emp.Id" class="btn btn-secondary"><i class="fa-solid fa-pen-to-square"></i></a>
                 <a href="/Employee/getEmpbyId?id=@emp.Id" class="btn btn-info">Info</a>
+                <a href="##" onclick="GetEmpByIdUsingPartial(@emp.Id)" class="btn btn-warning">DetailPartial</a>
             </td>
         </tr>
     }
 
 </table>
 
-@section Scripts {
-   
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        
+        function GetEmpByIdUsingPartial(id){
+           event.preventDefault();
+           debugger;
+           $.ajax({
+               URL:"/Employee/GetEmpByIdUsingPartial/"+id,
+               success:function(result){
+                   console.log(result);
+
+               }
+           });
+
+        }
+    </script>
+
 }

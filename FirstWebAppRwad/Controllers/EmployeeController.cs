@@ -162,5 +162,11 @@ namespace FirstWebAppRwad.Controllers
             }
         }
 
+        public IActionResult GetEmpByIdUsingPartial(int id)
+        {
+            var emp = context.Employees.FirstOrDefault(x => x.Id == id);
+            return PartialView(emp);
+        }
+
     }
 }
