@@ -1,0 +1,13 @@
+﻿@using FirstWebAppRwad.Repository
+@inject IEmployeeRepository _empRepo
+@{
+    ViewData["Title"] = "TestServiceLifeTime";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+
+<h1>TestServiceLifeTime</h1>
+
+
+<h1>@ViewBag.Id</h1>
+
+<h2>@_empRepo.Id</h2>

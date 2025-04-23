@@ -9,6 +9,11 @@ namespace FirstWebAppRwad.Models.Context
             
         }
 
+        public ApplicationContext(DbContextOptions options):base(options)
+        {
+
+        }
+
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

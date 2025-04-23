@@ -1,5 +1,6 @@
 ﻿using FirstWebAppRwad.Models;
 using FirstWebAppRwad.Models.Context;
+using FirstWebAppRwad.Repository;
 using FirstWebAppRwad.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,17 +10,29 @@ namespace FirstWebAppRwad.Controllers
 {
     public class EmployeeController : Controller
     {
-        ApplicationContext context = new ApplicationContext();
+        //ApplicationContext context = new ApplicationContext();
 
         //Recommended
+        readonly IEmployeeRepository empRepo;
+        readonly IDepartmentRepository deptRepo;
 
-        public EmployeeController()
+        //tightly coupled
+        public EmployeeController(IEmployeeRepository _empRepo,IDepartmentRepository _deptRepo)
         {
 
+            //dont create ask  =>   resolve service
+            //tightly coupling 
+            empRepo = _empRepo;
+            deptRepo = _deptRepo;
         }
+
+
         public IActionResult Index()
         {
-            var emps = context.Employees.Include(x => x.Department).ToList();
+            // var emps = context.Employees.Include(x => x.Department).ToList();
+            // var emps = context.Employees.ToList();
+            //var emps = empRepo.GetAll();
+            var emps = empRepo.GetAllWithDept();
             //return View("Index");
             //return View();
             //return View("index", emps);
@@ -53,7 +66,8 @@ namespace FirstWebAppRwad.Controllers
 
             ViewData["name"] = "youssef";
 
-            var emp = context.Employees.Find(id);
+            // var emp = context.Employees.Find(id);
+            var emp = empRepo.GetById(id);
 
             #region Deal With View Model
             EmployeeWithColorAndMessageAndNameAndBranchesViewModel viewModel = new();
@@ -69,7 +83,7 @@ namespace FirstWebAppRwad.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var depts = context.Departments.ToList();
+            var depts = deptRepo.GetAll();
             ViewData["depts"] = depts;
             return View(new Employee());
         }
@@ -81,15 +95,16 @@ namespace FirstWebAppRwad.Controllers
 
             //if(newEmp.Name !=null &&newEmp.Name.Length>=3&&newEmp.Name.Length<=20 &&newEmp.Age!=0&&newEmp.Salary!=0&&newEmp.Address!=null&&newEmp.DeptId!=null)
             {
-                context.Employees.Add(newEmp);
-                context.SaveChanges();
+                //context.Employees.Add(newEmp);
+                //context.SaveChanges();
+                empRepo.Add(newEmp);
                 return RedirectToAction("index");
             }
             else
             {
 
 
-                var depts = context.Departments.ToList();
+                var depts = deptRepo.GetAll();
                 ViewData["depts"] = depts;
                 return View(newEmp);
             }
@@ -114,8 +129,10 @@ namespace FirstWebAppRwad.Controllers
 
         public IActionResult checkUniqueName(string name, int id)
         {
-            var emps = context.Employees.Where(x => x.Name == name).FirstOrDefault();
-            var empId = context.Employees.Find(id);
+            //var emps = context.Employees.Where(x => x.Name == name).FirstOrDefault();
+            var emps = empRepo.GetObjByFilter(x => x.Name == name);
+            // var empId = context.Employees.Find(id);
+            var empId = empRepo.GetById(id);
             if (emps == null ||empId is not null)
                 return Json(true);
             else
@@ -124,15 +141,18 @@ namespace FirstWebAppRwad.Controllers
 
         public IActionResult getEmpbyId(int id)
         {
-            var emp = context.Employees.Find(id);
+            var emp = empRepo.GetById(id);
             return View(emp);
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var oldEmp = context.Employees.Find(id);
-            var depts = context.Departments.ToList();
+            //var oldEmp = context.Employees.Find(id);
+
+            var oldEmp = empRepo.GetById(id);
+
+            var depts = deptRepo.GetAll();
             ViewData["depts"] = depts;
             return View(oldEmp);
         }
@@ -147,16 +167,18 @@ namespace FirstWebAppRwad.Controllers
                 //oldEmp.Age = editEmp.Age;
                 //oldEmp.Salary = editEmp.Salary;
                 //oldEmp.DeptId = editEmp.DeptId;
-                var myState = context.Entry(editEmp).State;
-                context.Entry(editEmp).State = EntityState.Modified;
-                context.Employees.Update(editEmp);
-                context.SaveChanges();
+                //var myState = context.Entry(editEmp).State;
+                //context.Entry(editEmp).State = EntityState.Modified;
+                //context.Employees.Update(editEmp);
+                //context.SaveChanges();
+                empRepo.Edit(id, editEmp);
 
                 return RedirectToAction("Index");
             }
             else
             {
-                var depts = context.Departments.ToList();
+                // var depts = context.Departments.ToList();
+                var depts = deptRepo.GetAll();
                 ViewData["depts"] = depts;
                 return View(editEmp);
             }
@@ -164,22 +186,35 @@ namespace FirstWebAppRwad.Controllers
 
         public IActionResult GetEmpByIdUsingPartial(int id)
         {
-            var emp = context.Employees.FirstOrDefault(x => x.Id == id);
+            //var emp = context.Employees.FirstOrDefault(x => x.Id == id);
+            var emp = empRepo.GetById(id);
+
             return PartialView(emp);
         }
         public IActionResult GetEmpByIdUsingModal (int id)
         {
-            var emp = context.Employees.FirstOrDefault(x => x.Id == id);
+            //var emp = context.Employees.FirstOrDefault(x => x.Id == id);
+            var emp = empRepo.GetById(id);
             return PartialView(emp);
         }
 
         [HttpGet]
         public IActionResult EditByModal(int id)
         {
-            var oldEmp = context.Employees.FirstOrDefault(e => e.Id == id);
-            var depts = context.Departments.ToList();
+            //  var oldEmp = context.Employees.FirstOrDefault(e => e.Id == id);
+            var oldEmp = empRepo.GetById(id);
+            //  var depts = context.Departments.ToList();
+            var depts = deptRepo.GetAll();
             ViewData["depts"] = depts;
             return PartialView(oldEmp);
+        }
+
+        [HttpGet]
+        //Employee/TestServiceLifeTime
+        public IActionResult TestServiceLifeTime()
+        {
+            ViewBag.Id = empRepo.Id;
+            return View();
         }
     }
 }

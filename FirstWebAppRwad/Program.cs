@@ -1,3 +1,8 @@
+using FirstWebAppRwad.Models.Context;
+using FirstWebAppRwad.Repository;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+
 namespace FirstWebAppRwad
 {
     public class Program
@@ -12,6 +17,27 @@ namespace FirstWebAppRwad
                 option.IOTimeout = TimeSpan.FromMinutes(50);
             });
             builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            //register services
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
+            //builder.Services.AddDbContext<ApplicationContext>
+            //    (options=>options.UseSqlServer(""));
+
+            builder.Services.AddDbContext<ApplicationContext>
+                (o=>o.UseSqlServer(builder.Configuration.GetConnectionString("CS")));
+
+            //services
+            //built in service => already registred 
+            //built in service => need register
+            //custom service 
+
+            //regigster service 
+            //singleton 
+            //transient 
+            //addscoped
 
             var app = builder.Build();
 
