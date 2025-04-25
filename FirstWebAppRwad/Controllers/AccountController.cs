@@ -12,13 +12,12 @@ namespace FirstWebAppRwad.Controllers
     {
 
         private readonly UserManager<ApplicationUser> userManager;
-
-        public SignInManager<ApplicationUser> SignInManager { get; }
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public AccountController(UserManager<ApplicationUser> userManager , SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
-            SignInManager = signInManager;
+            this.signInManager = signInManager;
         }
 
 
@@ -87,18 +86,18 @@ namespace FirstWebAppRwad.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginViewModel userLoginVM)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = await userManager.FindByNameAsync(userLoginVM.Name);
-                if(user is not null)
+                if (user is not null)
                 {
-                    //var validLogin = await userManager.CheckPasswordAsync(user, userLoginVM.Password);
-                    var validLogin= await userManager.CheckPasswordAsync(user, "1234");
-                    if(validLogin)
+                    var validLogin = await userManager.CheckPasswordAsync(user, userLoginVM.Password);
+                   // var validLogin = await userManager.CheckPasswordAsync(user, "1234");
+                    if (validLogin)
                     {
                         //cookie based 
-                        await SignInManager.SignInAsync(user, userLoginVM.RemeberMe);
-                        return RedirectToAction("index","Employee");
+                        await signInManager.SignInAsync(user, userLoginVM.RemeberMe);
+                        return RedirectToAction("index", "Employee");
                     }
                     else
                     {
@@ -108,6 +107,33 @@ namespace FirstWebAppRwad.Controllers
             }
             return View();
         }
+
+
+        //public async Task<IActionResult> Login(UserLoginViewModel userLogin)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await userManager.FindByNameAsync(userLogin.Name);
+        //        if (user is not null)
+        //        {
+
+        //            var validUser = await userManager.CheckPasswordAsync(user, userLogin.Password);
+        //            if (validUser)
+        //            {
+        //                //make signIn by sing in manager
+
+        //                //SignInManager<ApplicationUser> signInManager
+        //                //    = new SignInManager<ApplicationUser>()
+
+        //                //                        List<Claim> claims = new List<Claim>();
+        //                // claims.Add(new Claim("userAdderss", applicationUser.Address));
+        //                // await _signInManager.SignInWithClaimsAsync(applicationUser, model.RemmberMe, claims);//Id
+        //                await signInManager.SignInAsync(user, false);
+        //            }
+        //        }
+        //    }
+        //    return View();
+        //}
 
     }
 }
