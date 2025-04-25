@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FirstWebAppRwad.IdentityModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace FirstWebAppRwad.Models.Context
 {
-    public class ApplicationContext:DbContext
+    public class ApplicationContext:IdentityDbContext<ApplicationUser>
     {
         public ApplicationContext()
         {

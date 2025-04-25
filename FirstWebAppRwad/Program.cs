@@ -1,5 +1,9 @@
+using FirstWebAppRwad.Filters;
+using FirstWebAppRwad.IdentityModels;
 using FirstWebAppRwad.Models.Context;
 using FirstWebAppRwad.Repository;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 
@@ -16,7 +20,18 @@ namespace FirstWebAppRwad
             {
                 option.IOTimeout = TimeSpan.FromMinutes(50);
             });
-            builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthentication();
+
+
+                //(options=>options.Filters.Add<AuthorizeFilter>())
+                //.AddSessionStateTempDataProvider();
+    //        builder.Services.AddAuthentication("MyCookieScheme")
+    //.AddCookie("MyCookieScheme", options =>
+    //{
+    //    options.LoginPath = "/Account/Login";
+    //    options.AccessDeniedPath = "/Account/AccessDenied";
+    //});
             //register services
             //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
@@ -26,8 +41,16 @@ namespace FirstWebAppRwad
             //builder.Services.AddDbContext<ApplicationContext>
             //    (options=>options.UseSqlServer(""));
 
+
+            //built in service not registered by default 
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>
+                (
+                )
+                .AddEntityFrameworkStores<ApplicationContext>();
+
+
             builder.Services.AddDbContext<ApplicationContext>
-                (o=>o.UseSqlServer(builder.Configuration.GetConnectionString("CS")));
+                (o => o.UseSqlServer(builder.Configuration.GetConnectionString("CS")));
 
             //services
             //built in service => already registred 
@@ -56,15 +79,15 @@ namespace FirstWebAppRwad
             //controller Name = department  action name =index
             app.UseRouting();
             //user name and password 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             //authoized 
-            // app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
-        // pattern: "{controller=Home}/{action=Index}/{id?}");
+                // pattern: "{controller=Home}/{action=Index}/{id?}");
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             // pattern: "{controller=Home}/{action=Index}/{name?}");
             app.Run();

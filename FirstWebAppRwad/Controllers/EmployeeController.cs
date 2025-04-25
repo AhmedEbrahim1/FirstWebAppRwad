@@ -1,7 +1,9 @@
-﻿using FirstWebAppRwad.Models;
+﻿using FirstWebAppRwad.Filters;
+using FirstWebAppRwad.Models;
 using FirstWebAppRwad.Models.Context;
 using FirstWebAppRwad.Repository;
 using FirstWebAppRwad.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +28,7 @@ namespace FirstWebAppRwad.Controllers
             deptRepo = _deptRepo;
         }
 
-
+        //[Authorize]
         public IActionResult Index()
         {
             // var emps = context.Employees.Include(x => x.Department).ToList();
@@ -40,6 +42,7 @@ namespace FirstWebAppRwad.Controllers
         }
 
         //Employee/GetById
+        //[LoggingError]
         public IActionResult GetById(int id)
         {
             //send data additional 
@@ -214,6 +217,14 @@ namespace FirstWebAppRwad.Controllers
         public IActionResult TestServiceLifeTime()
         {
             ViewBag.Id = empRepo.Id;
+            return View();
+        }
+
+        [HttpGet]
+        [LoggingError]
+        public IActionResult TestLoggingError()
+        {
+            throw new NullReferenceException();
             return View();
         }
     }
